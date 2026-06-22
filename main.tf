@@ -1,3 +1,28 @@
+variable "ami_id" {
+	description = "The AMI ID to use for the EC2 instance"
+	default = "ami-0440d3b780d96b29d" # Amazon Linux 2 AMI in us-east-1
+}
+
+variable "instance_type" {
+	description = "The instance type to use for the EC2 instance"
+	default = "t3.micro"
+}
+
+variable "server_name" {
+	description = "The name tag for the EC2 instance"
+	default = "nginx-server"
+}
+
+variable "environment" {
+	description = "The environment tag for the EC2 instance"
+	default = "test-tf"
+}
+
+variable "team" {
+	description = "The team tag for the EC2 instance"
+	default = "DevOps"
+}
+
 # provider AWS
 provider "aws" {
 	region = "us-east-1"
@@ -5,8 +30,8 @@ provider "aws" {
 
 # create an EC2 instance
 resource "aws_instance" "nginx-server" {
-	ami = "ami-0440d3b780d96b29d"
-	instance_type = "t3.micro"
+	ami = var.ami_id
+	instance_type = var.instance_type
 
 	# use yum because the AMI is Amazon Linux 2
 	user_data = <<-EOF
@@ -23,31 +48,31 @@ resource "aws_instance" "nginx-server" {
 	]
 
 	tags = {
-		Name = "nginx-server"
-		Environment = "test"
+		Name = var.server_name
+		Environment = var.environment
 		Owner = "guillerfiore03@gmail.com"
-		Team = "DevOps"
+		Team = var.team
 		Project = "Terraform Practice"
 	}
 }
 
 # create a key pair for SSH 
 resource "aws_key_pair" "nginx-server-ssh" {
-	key_name = "nginx-server-ssh"
-	public_key = file("nginx-server.key.pub")
+	key_name = "${var.server_name}-ssh"
+	public_key = file("${var.server_name}.key.pub")
 
 	tags = {
-		Name = "nginx-server-ssh"
-		Environment = "test"
+		Name = "${var.server_name}-ssh"
+		Environment = var.environment
 		Owner = "guillefiore03@gmail.com"
-		Team = "DevOps"
+		Team = var.team
 		Project = "Terraform Practice"
 	}
 }
 
 # create a security group 
 resource "aws_security_group" "nginx-server-sg" {
-	name = "nginx-server-sg"
+	name = "${var.server_name}-sg"
 	description = "Security group allowing HTTP and SSH access"
 
 	# allow SSH
@@ -75,21 +100,21 @@ resource "aws_security_group" "nginx-server-sg" {
 	}
 
 	tags = {
-		Name = "nginx-server-sg"
-		Environment = "test"
+		Name = "${var.server_name}-sg"
+		Environment = var.environment
 		Owner = "guillefiore03@gmail.com"
-		Team = "DevOps"
+		Team = var.team
 		Project = "Terraform Practice"
 	}
 }
 
-	# output
-	output "server_public_ip" {
-		description = "Public IP address of the nginx server"
-		value = aws_instance.nginx-server.public_ip
-	}
+# output
+output "server_public_ip" {
+	description = "Public IP address of the nginx server"
+	value = aws_instance.nginx-server.public_ip
+}
 
-	output "server_public_dns" {
-		description = "Public DNS name of the nginx server"
-		value = aws_instance.nginx-server.public_dns
-	}
+output "server_public_dns" {
+	description = "Public DNS name of the nginx server"
+	value = aws_instance.nginx-server.public_dns
+}
