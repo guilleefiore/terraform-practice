@@ -1,16 +1,20 @@
 # Terraform local directory
 .terraform/
-**/.terraform/*
+
+# Terraform keys
+*.pem
+*.key
+*.pub
 
 # Terraform state files
 *.tfstate
 *.tfstate.*
-terraform.tfstate
-terraform.tfstate.backup
 
 # Terraform variable files that may contain sensitive data
 *.tfvars
 *.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
 
 # Terraform plan files
 *.tfplan
@@ -25,10 +29,6 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-# Terraform CLI config files
-.terraformrc
-terraform.rc
 
 # OS files
 .DS_Store
