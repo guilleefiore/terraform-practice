@@ -44,3 +44,21 @@ output "nginx_qa_dns" {
 	description = "Public DNS name of the nginx server"
 	value = module.nginx_server_qa.server_public_dns
 }
+
+# import
+
+# aws_instance.server-web:
+resource "aws_instance" "server-web" {
+    ami                                  = "ami-08f44e8eca9095668"
+    instance_type                        = "t3.micro"
+    tags                                 = {
+      Name = "server-web"
+      Environment = "test"
+      Owner = "guillerfiore03@gmail.com"
+      Team = "DevOps"
+      Project = "Terraform Practice"
+    }
+    vpc_security_group_ids               = [
+        "sg-046ee74f63535a713",
+    ]
+}
