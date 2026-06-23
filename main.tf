@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "terraform-buckets3-practice"
+    key = "terraform-practice/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 module "nginx_server_dev" {
   source = "./nginx_server_module"
 
