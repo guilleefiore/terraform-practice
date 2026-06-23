@@ -10,12 +10,12 @@ variable "instance_type" {
 
 variable "server_name" {
 	description = "The name tag for the EC2 instance"
-	default = "nginx-server"
+	default = "nginx-server-dev"
 }
 
 variable "environment" {
 	description = "The environment tag for the EC2 instance"
-	default = "test-tf"
+	default = "dev"
 }
 
 variable "team" {
